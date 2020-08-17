@@ -31,9 +31,15 @@ namespace UrlShortener
         // For more information on how to configure your application, visit https://go.microsoft.com/fwlink/?LinkID=398940
         public void ConfigureServices(IServiceCollection services)
         {
+            var cstring = Configuration.GetConnectionString("DefaultConnection");
+            if (string.IsNullOrWhiteSpace(cstring))
+            {
+                cstring = Environment.GetEnvironmentVariable("ConnectionStrings.DefaultConnection");
+            }
+
             services.AddDbContext<ApplicationDbContext>(options =>
-                options.UseSqlServer(
-                    Configuration.GetConnectionString("DefaultConnection")));
+                options.UseSqlServer(cstring
+                    ));
             services.AddDefaultIdentity<IdentityUser>(options => options.SignIn.RequireConfirmedAccount = true)
                 .AddEntityFrameworkStores<ApplicationDbContext>();
             services.AddRazorPages();
