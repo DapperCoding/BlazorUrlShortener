@@ -32,6 +32,7 @@ namespace UrlShortener
         public void ConfigureServices(IServiceCollection services)
         {
             var cstring = Configuration.GetConnectionString("DefaultConnection");
+
             if (string.IsNullOrWhiteSpace(cstring))
             {
                 cstring = Environment.GetEnvironmentVariable("DefaultConnectionString");
