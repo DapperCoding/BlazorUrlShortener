@@ -44,3 +44,5 @@ node_modules/
 
 /wwwroot/images/*
 *.g.cs
+appsettings.json
+appsettings.development.json
