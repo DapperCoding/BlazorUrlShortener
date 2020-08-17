@@ -18,7 +18,7 @@ FROM build AS publish
 RUN dotnet publish "UrlShortener.csproj" -c Release -o /app/publish
 
 FROM base AS final
-ENV "ConnectionStrings.DefaultConnection"=$cstring
+ENV ConnectionStrings.DefaultConnection $cstring
 WORKDIR /app
 COPY --from=publish /app/publish .
 ENTRYPOINT ["dotnet", "UrlShortener.dll"]
