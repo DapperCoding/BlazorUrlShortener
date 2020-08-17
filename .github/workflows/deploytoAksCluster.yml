@@ -1,0 +1,50 @@
+on: [push]
+jobs:
+  build-and-deploy:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@master
+    
+    - uses: azure/docker-login@v1
+      with:
+        login-server: dapperdino.azurecr.io
+        username: ${{ secrets.acr_dapperdino_username }}
+        password: ${{ secrets.acr_dapperdino_password }}
+    
+    - name: Build and push image to ACR
+      id: build-image
+      run: |
+        docker build "$GITHUB_WORKSPACE/UrlShortener" -f  "UrlShortener/Dockerfile" -t dapperdino.azurecr.io/dapperdino:${{ github.sha }}
+        docker push dapperdino.azurecr.io/dapperdino:${{ github.sha }}
+    
+    - uses: azure/k8s-set-context@v1
+      with:
+         kubeconfig: ${{ secrets.aks_dapperdino_kubeConfig }}
+      id: login
+    
+    - name: Create namespace
+      run: |
+        namespacePresent=`kubectl get namespace | grep dapperdinoa50a | wc -l`
+        if [ $namespacePresent -eq 0 ]
+        then
+            echo `kubectl create namespace dapperdinoa50a`
+        fi
+
+    - uses: azure/k8s-create-secret@v1
+      with:
+        namespace: dapperdinoa50a
+        container-registry-url: dapperdino.azurecr.io
+        container-registry-username: ${{ secrets.acr_dapperdino_username }}
+        container-registry-password: ${{ secrets.acr_dapperdino_password }}
+        secret-name: dapperdinodockerauth
+       
+    - uses: azure/k8s-deploy@v1
+      with:
+        namespace: dapperdinoa50a
+        manifests: |
+          manifests/deployment.yml
+          manifests/service.yml
+        images: |
+          dapperdino.azurecr.io/dapperdino:${{ github.sha }}
+        imagepullsecrets: |
+          dapperdinodockerauth
