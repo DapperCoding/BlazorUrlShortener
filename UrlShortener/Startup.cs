@@ -38,8 +38,7 @@ namespace UrlShortener
             }
 
             services.AddDbContext<ApplicationDbContext>(options =>
-                options.UseSqlServer(cstring
-                    ));
+                options.UseSqlServer(cstring));
             services.AddDefaultIdentity<IdentityUser>(options => options.SignIn.RequireConfirmedAccount = true)
                 .AddEntityFrameworkStores<ApplicationDbContext>();
             services.AddRazorPages();
