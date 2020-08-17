@@ -1,9 +1,9 @@
-apiVersion : apps/v1beta1
+apiVersion: apps/v1beta1
 kind: Deployment
 metadata:
   name: "dapperdino-0160"
 spec:
-  replicas: 2
+  replicas: 1
   template:
     metadata:
       labels:
@@ -13,4 +13,4 @@ spec:
         - name: "dapperdino-0160"
           image: "dapperdino.azurecr.io/dapperdino"
           ports:
-          - containerPort: 80
+            - containerPort: 80
