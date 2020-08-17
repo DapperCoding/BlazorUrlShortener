@@ -9,7 +9,6 @@ EXPOSE 443
 
 FROM mcr.microsoft.com/dotnet/core/sdk:3.1-buster AS build
 WORKDIR /src
-COPY NuGet.config .
 COPY ["UrlShortener.csproj", ""]
 RUN dotnet restore "./UrlShortener.csproj"
 COPY . .
