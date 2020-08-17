@@ -14,7 +14,7 @@ jobs:
       - name: Build and push image to ACR
         id: build-image
         run: |
-          docker build "$GITHUB_WORKSPACE/UrlShortener" -f  "UrlShortener/Dockerfile" -t dapperdino.azurecr.io/dapperdino:${{ github.sha }} --build-arg cstring ${{ secrets.cstring }}
+          docker build --build-arg cstring ${{ secrets.cstring }} "$GITHUB_WORKSPACE/UrlShortener" -f  "UrlShortener/Dockerfile" -t dapperdino.azurecr.io/dapperdino:${{ github.sha }}
           docker push dapperdino.azurecr.io/dapperdino:${{ github.sha }}
 
       - uses: azure/k8s-set-context@v1
