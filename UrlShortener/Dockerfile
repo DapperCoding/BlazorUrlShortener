@@ -2,7 +2,6 @@
 
 FROM mcr.microsoft.com/dotnet/core/aspnet:3.1-buster-slim AS base
 ARG cstring
-ENV ConnectionStrings.DefaultConnection=$cstring
 WORKDIR /app
 EXPOSE 80
 EXPOSE 443
@@ -19,6 +18,7 @@ FROM build AS publish
 RUN dotnet publish "UrlShortener.csproj" -c Release -o /app/publish
 
 FROM base AS final
+ENV "ConnectionStrings.DefaultConnection"=$cstring
 WORKDIR /app
 COPY --from=publish /app/publish .
-ENTRYPOINT ["dotnet", "UrlShortener.dll"]
+ENTRYPOINT ["dotnet", "UrlShortener.dll",]
