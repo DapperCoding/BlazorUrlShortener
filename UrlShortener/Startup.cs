@@ -34,7 +34,7 @@ namespace UrlShortener
             var cstring = Configuration.GetConnectionString("DefaultConnection");
             if (string.IsNullOrWhiteSpace(cstring))
             {
-                cstring = Environment.GetEnvironmentVariable("ConnectionStrings.DefaultConnection");
+                cstring = Environment.GetEnvironmentVariable("DefaultConnectionString");
             }
 
             services.AddDbContext<ApplicationDbContext>(options =>
